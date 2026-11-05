@@ -1,0 +1,23 @@
+{
+  "name": "cau-nguyen-co-phieu",
+  "version": "1.0.0",
+  "description": "Điện Thờ Chứng Khoán - Cầu Nguyện Cổ Phiếu Về Bờ & Tím Toàn Sàn (Phong cách Chánh Điện Online)",
+  "main": "server.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs"
+  },
+  "keywords": [
+    "chung-khoan",
+    "co-phieu",
+    "cau-nguyen",
+    "chanh-dien-online",
+    "tam-linh-tai-chinh"
+  ],
+  "author": "Antigravity & Mister CO",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

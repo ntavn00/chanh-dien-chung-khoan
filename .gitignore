@@ -1,0 +1,9 @@
+node_modules/
+.playwright-mcp/
+*.log
+.DS_Store
+Thumbs.db
+test_*.mp3
+test_*.cjs
+_ref_chanh_dien/
+
