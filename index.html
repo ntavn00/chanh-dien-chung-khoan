@@ -4793,20 +4793,35 @@ function updateVietQR() {
 // Bank config is fixed to Techcombank 6891456789
 }
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function renderGoldenBoard() {
   const container = document.getElementById('goldenBoardList');
   if (!container) return;
   container.innerHTML = donationsList.map((d, idx) => {
     const rankIcon = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`;
     const rankClass = idx === 0 ? 'rank-1' : '';
+    const safeUser = escapeHtml(d.user || 'Thí Chủ');
+    const safeStock = escapeHtml(d.stock || 'VNI');
+    const safeGift = escapeHtml(d.gift || 'Lễ Vật Tâm Linh');
+    const safeTime = escapeHtml(d.time || '');
+    const safeAmount = (Number(d.amount) || 0).toLocaleString('vi-VN');
     return `
       <div class="board-item ${rankClass}">
         <div class="board-rank">${rankIcon}</div>
         <div class="board-info">
-          <div class="board-user">${d.user} <span style="color:var(--gold); font-size:10px;">[${d.stock}]</span></div>
-          <div class="board-gift">Dâng: ${d.gift || 'Lễ Vật Tâm Linh'} · ${d.time || ''}</div>
+          <div class="board-user">${safeUser} <span style="color:var(--gold); font-size:10px;">[${safeStock}]</span></div>
+          <div class="board-gift">Dâng: ${safeGift} · ${safeTime}</div>
         </div>
-        <div class="board-amount">+${(d.amount || 0).toLocaleString('vi-VN')} đ</div>
+        <div class="board-amount">+${safeAmount} đ</div>
       </div>
     `;
   }).join('');

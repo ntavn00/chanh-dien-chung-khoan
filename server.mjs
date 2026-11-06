@@ -58,15 +58,31 @@ const bankConfig = {
   webhookSecret: process.env.WEBHOOK_SECRET || ''
 };
 
+function sanitizeClean(str, maxLen = 30) {
+  if (typeof str !== 'string') return '';
+  return str.replace(/<[^>]*>/g, '').replace(/[^\p{L}\p{N}\s_.,!?#\-\[\]]/gu, '').trim().slice(0, maxLen);
+}
+
+const ALLOWED_GIFTS = new Set([
+  'Bò Vàng Sen Vàng VIP',
+  'Heo Quay Tím Trần',
+  'Chuối Xanh Về Bờ',
+  'Nhang Xanh Cắt Lỗ',
+  'Cà Phê Dev',
+  'Trà Đá Server',
+  'Nhang Tím Trần',
+  'Lễ Vật Tâm Linh'
+]);
+
 // Process incoming donation (from SePay, Casso, or Test simulator)
 function processDonation({ id, user, stock, amount, gift, content }) {
-  const cleanAmount = Number(amount) || 5000;
-  let cleanUser = (user || '').trim().slice(0, 25);
-  let cleanStock = (stock || '').trim().toUpperCase().slice(0, 8);
+  const cleanAmount = Math.max(1000, Number(amount) || 5000);
+  let cleanUser = sanitizeClean(user, 25);
+  let cleanStock = sanitizeClean(stock, 8).toUpperCase();
 
   // If content is provided from bank transfer memo e.g. "CDCK ChienThan HPG"
   if (content) {
-    const rawContent = content.trim().replace(/^CDCK\s+/i, '');
+    const rawContent = sanitizeClean(content, 60).replace(/^CDCK\s+/i, '');
     const parts = rawContent.split(/\s+/);
     if (parts.length >= 2) {
       if (!cleanUser) cleanUser = parts[0];
@@ -83,7 +99,7 @@ function processDonation({ id, user, stock, amount, gift, content }) {
   if (!cleanUser) cleanUser = 'Thí Chủ Hảo Tâm';
   if (!cleanStock) cleanStock = 'VNI';
 
-  let giftName = gift;
+  let giftName = ALLOWED_GIFTS.has(gift) ? gift : null;
   if (!giftName) {
     if (cleanAmount >= 18888) giftName = 'Bò Vàng Sen Vàng VIP';
     else if (cleanAmount >= 9999) giftName = 'Heo Quay Tím Trần';
@@ -310,6 +326,11 @@ const server = http.createServer((req, res) => {
 
   // Test Webhook Simulation Endpoint (for immediate live testing)
   if (pathname === '/api/webhook/test-donate' && req.method === 'POST') {
+    const authKey = parsedUrl.searchParams.get('key') || req.headers['x-admin-key'];
+    if (authKey !== 'chanhdien_admin_2026') {
+      res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
+      return res.end('Forbidden');
+    }
     let body = '';
     req.on('data', chunk => body += chunk);
     req.on('end', () => {
