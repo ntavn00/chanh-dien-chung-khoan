@@ -1972,7 +1972,7 @@ html, body { height: 100%; width: 100%; margin: 0; background: var(--bg); color:
             </div>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
               <button class="btn" id="readFortuneVoiceBtn" style="flex:1; background:linear-gradient(135deg, #701a75, #a21caf); border-color:#f472b6; color:#fff; font-weight:700;">🔊 Ngâm Thơ Quẻ</button>
-              <button class="btn primary" id="copyFortuneBtn" style="flex:1;">📋 Copy Thơ Quẻ</button>
+              <button class="btn primary" id="copyFortuneBtn" style="flex:1;">📲 Chia Sẻ / Copy Quẻ</button>
               <button class="btn" id="reFortuneBtn">🔄 Xin Quẻ Khác</button>
             </div>
           </div>
@@ -3313,12 +3313,68 @@ const FORTUNE_POEMS = [
     poem: (s) => `Nền giá tích lũy tựa non cao,\nMã [${s}] gom đủ chuẩn bị trào.\nBệ phóng kim cương vừa kích hoạt,\nBay vút ngàn mây rực sắc đào!`
   },
   {
+    num: 'QUẺ SỐ 03: THỦY LÔI TRUÂN',
+    name: 'VƯỢT KHÓ KHỞI ĐẦU · ĐÁY SAU CAO HƠN ĐÁY TRƯỚC',
+    rate: '91% CE',
+    luck: 'Khởi Sắc Gian Nan ⭐⭐⭐⭐',
+    advice: 'Kiên Định Mục Tiêu',
+    poem: (s) => `Gian truân thử thách chí anh hào,\n[${s}] rung lắc chẳng hề nao.\nĐáy sau nâng bước cao hơn trước,\nChớm gió đông phong vút tận cao!`
+  },
+  {
+    num: 'QUẺ SỐ 04: SƠN THỦY MÔNG',
+    name: 'KHAI TÂM ĐẮC ĐẠO · HẾT THỜI NGƠ NGÁC F0',
+    rate: '89% CE',
+    luck: 'Tỉnh Mộng Giác Ngộ ⭐⭐⭐⭐',
+    advice: 'Đánh Theo Hệ Thống',
+    poem: (s) => `Hết thời đu đỉnh khóc ăn năn,\nHọc đạo kiên tâm vững dạ an.\nThấy rõ đường đi cùng tổ lái,\n[${s}] thẳng tiến đón xuân sang!`
+  },
+  {
+    num: 'QUẺ SỐ 05: THỦY THIÊN NHU',
+    name: 'CHỜ ĐỢI LÀ VÀNG · THỜI ĐIỂM VÀNG ĐÃ TỚI',
+    rate: '95% CE',
+    luck: 'Thời Cơ Chín Muồi ⭐⭐⭐⭐⭐',
+    advice: 'Tận Hưởng Thành Quả',
+    poem: (s) => `Bao ngày kiên nhẫn đợi thời cơ,\nCổ phiếu vào guồng đẹp tựa thơ.\nLái kéo lệnh to không kịp đếm,\nMã [${s}] vượt đỉnh chẳng ai ngờ!`
+  },
+  {
+    num: 'QUẺ SỐ 06: THIÊN THỦY TỤNG',
+    name: 'CHIẾN THẮNG CHIM LỢN · BẢNG ĐIỆN PHÂN MINH',
+    rate: '93% CE',
+    luck: 'Thị Phi Bất Động ⭐⭐⭐⭐',
+    advice: 'Bỏ Ngoài Tai Thị Phi',
+    poem: (s) => `Chim lợn rêu rao mặc tiếng vang,\nBảng điện trả lời sắc tím sang.\n[${s}] ngẩng cao đầu bay vút gió,\nKẻ bán hôm qua tiếc muôn vàn!`
+  },
+  {
+    num: 'QUẺ SỐ 07: ĐỊA THỦY SƯ',
+    name: 'ĐỒNG LÒNG TẤN CÔNG · HÀNH QUÂN VỀ ĐỈNH',
+    rate: '96% CE',
+    luck: 'Bách Chiến Bách Thắng ⭐⭐⭐⭐⭐',
+    advice: 'Thừa Thắng Xông Lên',
+    poem: (s) => `Triệu triệu cổ đông hiệp một lòng,\n[${s}] tiến bước tợ cuồng phong.\nQuét tan phe gấu trên toàn trận,\nKhải hoàn về bến thỏa ước mong!`
+  },
+  {
     num: 'QUẺ SỐ 08: THỦY ĐỊA TỶ',
     name: 'ĐẠI CA CÁ MẬP · QUÉT SẠCH CỤC BÁN',
     rate: '97% CE',
     luck: 'Đồng Tâm Hiệp Lực ⭐⭐⭐⭐⭐',
     advice: 'Đu Theo Cá Mập',
     poem: (s) => `Lệnh to trăm tỷ quét liên hồi,\nCục bán triệu phiên bay mất rồi.\nCổ đông [${s}] cùng thuyền lớn,\nThẳng tiến về bờ rạng nụ cười!`
+  },
+  {
+    num: 'QUẺ SỐ 09: PHONG THIÊN TIỂU SÚC',
+    name: 'TÍCH TIỂU THÀNH ĐẠI · GOM RÒNG GIÁ ĐỎ',
+    rate: '88% CE',
+    luck: 'Tích Lũy Bền Bỉ ⭐⭐⭐⭐',
+    advice: 'Nhặt Từng Đồng Rơi',
+    poem: (s) => `Mỗi phiên nhặt nhạnh chút hàng rơi,\nTích lũy đầy kho chuẩn bị chơi.\nMai này [${s}] bùng lên sóng,\nTa ngồi đếm lãi thảnh thơi đời!`
+  },
+  {
+    num: 'QUẺ SỐ 10: THIÊN TRẠCH LÝ',
+    name: 'CƯỠI ĐUÔI CỌP DỮ · ĐẢO CHIỀU NGOẠN MỤC',
+    rate: '92% CE',
+    luck: 'Hung Hóa Thành Cát ⭐⭐⭐⭐',
+    advice: 'Giữ Vững Tinh Thần',
+    poem: (s) => `Sóng dữ dập dồn tưởng đứt phanh,\nNgờ đâu nến đảo rút chân nhanh.\nMã [${s}] bừng sáng phiên ATC,\nĐưa anh tài khoản lại mướt xanh!`
   },
   {
     num: 'QUẺ SỐ 11: ĐỊA THIÊN THÁI',
@@ -3329,12 +3385,36 @@ const FORTUNE_POEMS = [
     poem: (s) => `Qua cơn bĩ cực tới hồi thái,\n[${s}] bứt phá đỉnh tương lai.\nCản dày cản mỏng đều xuyên thủng,\nVề bờ nhân bội túi tiền tài!`
   },
   {
+    num: 'QUẺ SỐ 12: THIÊN ĐỊA BĨ',
+    name: 'TẬN CÙNG CƠN BĨ · RỰC TỎI HỒI THÁI',
+    rate: '90% CE',
+    luck: 'Khổ Tận Cam Lai ⭐⭐⭐⭐',
+    advice: 'Chuẩn Bị Đón Sóng',
+    poem: (s) => `Bao ngày mây xám phủ màn sương,\nChạm đáy bật tăng ngát sắc hương.\n[${s}] đảo chiều nhanh như chớp,\nĐưa người viễn xứ tới thiên đường!`
+  },
+  {
+    num: 'QUẺ SỐ 13: THIÊN HỎA ĐỒNG NHÂN',
+    name: 'ĐỒNG THUYỀN VỀ BỜ · ANH EM MỘT NHÀ',
+    rate: '94% CE',
+    luck: 'Nghĩa Tình Huynh Đệ ⭐⭐⭐⭐⭐',
+    advice: 'Giữ Chặt Tay Nhau',
+    poem: (s) => `Cùng chung một chí hướng lên trần,\nChẳng ngại thị trường dẫu khó khăn.\nThuyền [${s}] cập bến trong rạng rỡ,\nCổ đông hoan hỷ đón tin xuân!`
+  },
+  {
     num: 'QUẺ SỐ 14: HỎA THIÊN ĐẠI HỮU',
-    name: 'ĐẠI PHÚ ĐẠI QUÝ · TIỀN VÀO NHƯ NƯỚC',
+    name: 'ĐẠI PHÚ ĐẠI QUÝ · TIỀN VÀO NHƯ THÁC',
     rate: '96% CE',
     luck: 'Vạn Sự Hanh Thông ⭐⭐⭐⭐⭐',
     advice: 'Nắm Chắc Hàng',
     poem: (s) => `Thiên thời địa lợi hợp nhân hòa,\n[${s}] tiền lớn múc xông pha.\nDư mua triệu cổ trần cứng ngắc,\nTài lộc đong đầy khắp mọi nhà!`
+  },
+  {
+    num: 'QUẺ SỐ 15: ĐỊA SƠN KHIÊM',
+    name: 'LÃI ĐẬM GIỮ KÍN · ĂN TRỌN THÂN CÁ',
+    rate: '91% CE',
+    luck: 'Đại Trí Nhược Ngu ⭐⭐⭐⭐',
+    advice: 'Kín Tiếng Đếm Tiền',
+    poem: (s) => `Lãi đậm trong tay cứ lặng thinh,\nChớ khoe lãi sớm khắp truyền hình.\nÂm thầm giữ [${s}] chờ ngày chốt,\nTài khoản phình to thỏa ước mình!`
   },
   {
     num: 'QUẺ SỐ 16: LÔI ĐỊA DỰ',
@@ -3345,12 +3425,44 @@ const FORTUNE_POEMS = [
     poem: (s) => `Bùng nổ theo đà rực sắc hoa,\nDòng tiền cuồn cuộn sóng bao la.\nMã [${s}] tiên phong tung cánh lướt,\nChim lợn ngơ ngác đứng trông xa!`
   },
   {
+    num: 'QUẺ SỐ 17: TRẠCH LÔI TÙY',
+    name: 'NƯƠNG THEO SÓNG LỚN · LƯỚT SÓNG ĐẠI DƯƠNG',
+    rate: '93% CE',
+    luck: 'Thuận Buồm Xuôi Gió ⭐⭐⭐⭐',
+    advice: 'Lướt Trên Con Sóng',
+    poem: (s) => `Sóng đẩy buồm xuôi cứ thuận dòng,\nThuyền theo cá mập vượt biển đông.\nMã [${s}] thanh thoát như phi mã,\nLợi nhuận tràn trề thỏa ước mong!`
+  },
+  {
+    num: 'QUẺ SỐ 18: SƠN PHONG CỔ',
+    name: 'THAY MÁU CỔ ĐÔNG · SẠCH BÓNG ĐU BÁM',
+    rate: '92% CE',
+    luck: 'Tàu Nhẹ Máy Êm ⭐⭐⭐⭐',
+    advice: 'Ngồi Vững Ghế Lái',
+    poem: (s) => `Cắt rũ bao nhiêu kẻ yếu gan,\nThay máu cổ đông sạch bóng sàn.\nTàu nhẹ [${s}] bon bon lướt,\nPhi thẳng về trời ngút đỉnh ngàn!`
+  },
+  {
     num: 'QUẺ SỐ 19: ĐỊA TRẠCH LÂM',
     name: 'MÙA XUÂN TRỞ LẠI · TỔ LÁI VÀO VIỆC',
     rate: '94% CE',
     luck: 'Khai Hội Đầu Xuân ⭐⭐⭐⭐⭐',
     advice: 'Thắt Dây An Toàn',
     poem: (s) => `Lái tàu kéo còi chuẩn bị lăn,\nAnh em thắt chặt dải dây an.\nĐường ray thông thoáng không cản trở,\n[${s}] vun vút vượt non ngàn!`
+  },
+  {
+    num: 'QUẺ SỐ 20: PHONG ĐỊA QUAN',
+    name: 'BÌNH THẢN QUAN SÁT · THỢ SĂN RÌNH MỒI',
+    rate: '90% CE',
+    luck: 'Thần Cơ Diệu Toán ⭐⭐⭐⭐',
+    advice: 'Chờ Đúng Thời Điểm',
+    poem: (s) => `Tọa sơn quan sát đám phong ba,\nChờ đúng thời cơ mới nhảy ra.\nBắt trúng [${s}] ngay điểm nổ,\nĂn trọn cây trần sướng cả nhà!`
+  },
+  {
+    num: 'QUẺ SỐ 21: HỎA LÔI PHỆ HẠP',
+    name: 'CẮN THỦNG MỌI CẢN · KHÔNG THỂ CẢN PHÁ',
+    rate: '97% CE',
+    luck: 'Sức Mạnh Vô Song ⭐⭐⭐⭐⭐',
+    advice: 'Đạp Bằng Trở Ngại',
+    poem: (s) => `Cản trên cản dưới chẳng hề chi,\n[${s}] xung trận quyết chiến phi.\nKhối lượng bung nóc trần tím lịm,\nAi cản đường này cũng rụt rè!`
   },
   {
     num: 'QUẺ SỐ 22: SƠN HỎA BÍ',
@@ -3361,12 +3473,28 @@ const FORTUNE_POEMS = [
     poem: (s) => `Báo cáo tung ra lãi vượt kỳ,\nNghi ngờ xóa sạch chẳng còn chi.\nHàng hiếm trên sàn ai cũng ước,\n[${s}] tỏa sáng giữa thiên tri!`
   },
   {
+    num: 'QUẺ SỐ 23: SƠN ĐỊA BÁC',
+    name: 'VÉT CÚ CUỐI CÙNG · RŨ CUNG RẺ RÚNG',
+    rate: '89% CE',
+    luck: 'Nhặt Rơi Hốt Lộc ⭐⭐⭐⭐',
+    advice: 'Dũng Cảm Bắt Đáy',
+    poem: (s) => `Phiên rung rũ sạch lớp hàng non,\nNhặt guốc vung tay múc trọn tròn.\nChân sóng [${s}] vừa mở lối,\nMàu hoa sim tím ngập non non!`
+  },
+  {
     num: 'QUẺ SỐ 24: ĐỊA LÔI PHỤC',
     name: 'ĐẢO CHIỀU TẠO ĐÁY · BẬT DẬY NHƯ LÒ XO',
     rate: '89% CE',
     luck: 'Bắt Đáy Trúng Đích ⭐⭐⭐⭐',
     advice: 'Kiên Trì Chờ Đợi',
     poem: (s) => `Tạo đáy hai đáy nén lò xo,\nBung nóc phiên nay hết lắng lo.\nKhối ngoại quay xe ngừng xả rác,\nLệnh mua quét sạch bảng điện to!`
+  },
+  {
+    num: 'QUẺ SỐ 25: THIÊN LÔI VÔ VỌNG',
+    name: 'HỒN NHIÊN ĂN TRẦN · THẦN MAY MẮN ĐỘ',
+    rate: '96% CE',
+    luck: 'Phúc Tinh Chiếu Mệnh ⭐⭐⭐⭐⭐',
+    advice: 'Tận Hưởng Niềm Vui',
+    poem: (s) => `Chẳng cần toan tính quá đau đầu,\nMua bừa mà trúng mối duyên sâu.\nMã [${s}] tự động phi thẳng tắp,\nTài lộc ngập tràn tới kiếp sau!`
   },
   {
     num: 'QUẺ SỐ 26: SƠN THIÊN ĐẠI SÚC',
@@ -3377,6 +3505,30 @@ const FORTUNE_POEMS = [
     poem: (s) => `Lái gom cạn kiệt mối tơ vương,\nBán tháo bao nhiêu hốt sạch đường.\nNay phát tín hiệu trần tím ngắt,\n[${s}] ngạo nghễ tỏa muôn phương!`
   },
   {
+    num: 'QUẺ SỐ 27: SƠN LÔI DI',
+    name: 'NUÔI DƯỠNG TÀI KHOẢN · SIÊU CỔ VỖ BÉO',
+    rate: '91% CE',
+    luck: 'Mầm Xanh Hóa Rồng ⭐⭐⭐⭐',
+    advice: 'Chăm Sóc Siêu Cổ',
+    poem: (s) => `Cổ phiếu như cây lớn mỗi ngày,\nChăm sóc kiên tâm phúc lộc dày.\nTài khoản [${s}] tăng đều đặn,\nCuộc đời thịnh vượng thỏa mê say!`
+  },
+  {
+    num: 'QUẺ SỐ 28: TRẠCH PHONG ĐẠI QUÁ',
+    name: 'VƯỢT QUA TƯỞNG TƯỢNG · ĐỘT PHÁ KỶ LỤC',
+    rate: '98% CE',
+    luck: 'Kỳ Tích Lịch Sử ⭐⭐⭐⭐⭐',
+    advice: 'Bỏ Qua Định Giá Cũ',
+    poem: (s) => `Tăng ngoài sức tưởng của chuyên gia,\nChỉ số P/E vứt xó nhà.\nMã [${s}] chỉ có đường leo dốc,\nCổ đông sung sướng hát bài ca!`
+  },
+  {
+    num: 'QUẺ SỐ 29: THUẦN KHẢM',
+    name: 'VƯỢT QUA VÙNG TRŨNG · NƯỚC CHẢY VỀ BIỂN',
+    rate: '88% CE',
+    luck: 'Vượt Khó Vươn Lên ⭐⭐⭐⭐',
+    advice: 'Giữ Vững Ý Chí',
+    poem: (s) => `Qua cơn sóng gió thác ghềnh sâu,\nDòng nước thông reo đến bến đầu.\nThử thách càng tôi thêm dũng khí,\n[${s}] rạng rỡ đón ngàn sau!`
+  },
+  {
     num: 'QUẺ SỐ 30: THUẦN LY',
     name: 'LỬA THIÊNG RỰC CHÁY · SẮC TÍM HOA CÀ',
     rate: '99% CE',
@@ -3385,12 +3537,28 @@ const FORTUNE_POEMS = [
     poem: (s) => `Màu tím hoa cà thắp sáng soi,\nDư mua chất đống ngút mây trời.\nCổ đông [${s}] cùng mở tiệc,\nBia mừng nâng chén khắp nơi nơi!`
   },
   {
+    num: 'QUẺ SỐ 31: TRẠCH SƠN HÀM',
+    name: 'TÂM LINH TƯƠNG THÔNG · LÁI HIỂU LÒNG NGƯỜI',
+    rate: '97% CE',
+    luck: 'Cầu Được Ước Thấy ⭐⭐⭐⭐⭐',
+    advice: 'Thắp Hương Cảm Tạ',
+    poem: (s) => `Vừa khấn hôm qua ở chánh đền,\nHôm nay lệnh múc đã vang rên.\nLái tàu thấu hiểu lòng tín chủ,\nKéo thẳng [${s}] vút tận trên!`
+  },
+  {
     num: 'QUẺ SỐ 32: LÔI PHONG HẰNG',
     name: 'BỀN VỮNG BẤT DIỆT · DOANH NGHIỆP ĐẦU NGÀNH',
     rate: '96% CE',
     luck: 'Kim Cương Bất Hoại ⭐⭐⭐⭐⭐',
     advice: 'Đồng Hành Dài Hạn',
     poem: (s) => `Cổ phiếu đầu ngành vị thế vương,\nVượt qua bão táp giữa thương trường.\n[${s}] vững bước nghìn năm thịnh,\nLợi nhuận tràn trề rạng non sông!`
+  },
+  {
+    num: 'QUẺ SỐ 33: THIÊN SƠN ĐỘN',
+    name: 'BIẾT ĐỦ LÀ VUI · BẢO TOÀN THÀNH QUẢ',
+    rate: '89% CE',
+    luck: 'Đại Lộc Đại An ⭐⭐⭐⭐',
+    advice: 'Đút Tiền Túi Áo',
+    poem: (s) => `Lãi gập ba lần túi đã đầy,\nThong dong chốt bớt hưởng trời mây.\nDành chút [${s}] cho vui vẻ,\nTậu nhà sắm xe rộn rã ngày!`
   },
   {
     num: 'QUẺ SỐ 34: LÔI THIÊN ĐẠI TRÁNG',
@@ -3409,6 +3577,54 @@ const FORTUNE_POEMS = [
     poem: (s) => `Sáng sớm rung lắc rũ chim lợn,\nChiều về lái kéo nến căng tròn.\nRút chân chữ V kinh điển nhất,\nVững tay chèo lái lộc trường tồn!`
   },
   {
+    num: 'QUẺ SỐ 36: ĐỊA HỎA MINH DI',
+    name: 'NGỌC ẨN TRONG ĐÁ · GIÁ TRỊ THỨC GIẤC',
+    rate: '93% CE',
+    luck: 'Ngọc Sáng Tinh Hoa ⭐⭐⭐⭐',
+    advice: 'Nhận Diện Cơ Hội',
+    poem: (s) => `Kim cương vùi lấp chẳng mờ phai,\nĐến lúc phô trương rực ánh mai.\nDoanh nghiệp hồi sinh bừng sức sống,\nMã [${s}] thăng tiến rạng tương lai!`
+  },
+  {
+    num: 'QUẺ SỐ 37: PHONG HỎA GIA NHÂN',
+    name: 'CẢ NHÀ CÙNG VUI · CÙNG NHAU ĐẾM LÃI',
+    rate: '95% CE',
+    luck: 'Gia Đạo Bình An ⭐⭐⭐⭐⭐',
+    advice: 'Đưa Vợ Đi Mua Sắm',
+    poem: (s) => `Cả nhà hớn hở nụ cười tươi,\nTài khoản xanh rêu rạng cuộc đời.\nNhờ chọn [${s}] làm chân ái,\nMùa xuân hoa nở khắp nơi nơi!`
+  },
+  {
+    num: 'QUẺ SỐ 38: HỎA TRẠCH KHUÊ',
+    name: 'KHÁC BIỆT ĐÁM ĐÔNG · ĐI CON ĐƯỜNG RIÊNG',
+    rate: '94% CE',
+    luck: 'Nghịch Lý Đắc Lợi ⭐⭐⭐⭐⭐',
+    advice: 'Đi Ngược Đám Đông',
+    poem: (s) => `Thiên hạ đua nhau bán tháo nhào,\nRiêng ta gom nhặt lúc lao đao.\nNay [${s}] quay đầu trần tím ngắt,\nĐám đông tròn mắt hỏi vì sao!`
+  },
+  {
+    num: 'QUẺ SỐ 39: THỦY SƠN KIỂN',
+    name: 'NÚI CAO HIỂM TRỞ · VƯỢT ĐỈNH NGOẠN MỤC',
+    rate: '92% CE',
+    luck: 'Chinh Phục Đỉnh Cao ⭐⭐⭐⭐',
+    advice: 'Đứng Vững Trên Đỉnh',
+    poem: (s) => `Dốc cao cheo leo chẳng nản lòng,\n[${s}] dũng mãnh vượt non sông.\nĐứng trên đỉnh núi nhìn muôn dặm,\nTài lộc mênh mông tợ ánh hồng!`
+  },
+  {
+    num: 'QUẺ SỐ 40: LÔI THỦY GIẢI',
+    name: 'GIẢI TỎA ÁP LỰC · TIỀN VỀ ĐẦY KHO',
+    rate: '94% CE',
+    luck: 'Tiêu Tai Hóa Lộc ⭐⭐⭐⭐⭐',
+    advice: 'Xóa Sạch Lo Âu',
+    poem: (s) => `Bao tháng ngày dài nén nỗi lo,\nCơn mưa tài lộc đổ về kho.\nGiải phóng margin cởi nút thắt,\nMã [${s}] thẳng tiến bước reo hò!`
+  },
+  {
+    num: 'QUẺ SỐ 41: SƠN TRẠCH TỔN',
+    name: 'BỎ NHỎ ĂN TO · CHIẾN LƯỢC TAY TO',
+    rate: '91% CE',
+    luck: 'Thuận Cơ Trảm Tạp ⭐⭐⭐⭐',
+    advice: 'Tập Trung Siêu Cổ',
+    poem: (s) => `Bỏ chút con tôm bắt cá hồi,\nCắt tỉa cành khô đón nụ chồi.\nDồn hết tinh hoa vào siêu cổ,\nMã [${s}] trần cứng suốt ba hồi!`
+  },
+  {
     num: 'QUẺ SỐ 42: PHONG LÔI ÍCH',
     name: 'GIÓ THỔI MÂY BAY · CỔ TỨC TIỀN MẶT',
     rate: '91% CE',
@@ -3425,12 +3641,36 @@ const FORTUNE_POEMS = [
     poem: (s) => `Siêu cổ vào guồng sóng đại dương,\n[${s}] ngạo nghễ khắp thương trường.\nAi bán mất hàng ngồi tiếc nuối,\nTa cười rạng rỡ đếm tiền lương!`
   },
   {
+    num: 'QUẺ SỐ 44: THIÊN PHONG CẤU',
+    name: 'KỲ DUYÊN GẶP GỠ · BẮT ĐÚNG CHÂN SÓNG',
+    rate: '97% CE',
+    luck: 'Thiên Duyên Tiền Định ⭐⭐⭐⭐⭐',
+    advice: 'Mối Duyên Vàng Ngọc',
+    poem: (s) => `Vô tình nhặt được mã thần tiên,\nChân sóng vừa nhô đã bén duyên.\n[${s}] kéo bảy cây trần tím,\nĐổi đời chớp mắt rạng cơ thiêng!`
+  },
+  {
+    num: 'QUẺ SỐ 45: TRẠCH ĐỊA TỤY',
+    name: 'TỤ HỘI ANH TÀI · DÒNG TIỀN THÔNG MINH',
+    rate: '95% CE',
+    luck: 'Vạn Dòng Quy Tụ ⭐⭐⭐⭐⭐',
+    advice: 'Bơi Theo Cá Mập',
+    poem: (s) => `Bao dòng tiền lớn đổ dồn về,\nKhối lượng gia tăng thỏa ước mê.\nMã [${s}] thăng hoa cùng sóng lớn,\nCổ đông hoan hỷ khắp bờ đê!`
+  },
+  {
     num: 'QUẺ SỐ 46: ĐỊA PHONG THĂNG',
     name: 'CÂY CAO LỚN MÃI · BẬC THANG DANH VỌNG',
     rate: '94% CE',
     luck: 'Leo Dốc Bền Bỉ ⭐⭐⭐⭐⭐',
     advice: 'Bám Chặt Xu Hướng',
     poem: (s) => `Từng bậc thong dong bước bước lên,\nXu hướng tăng dài vững chí bền.\nChỉnh là cơ hội gom thêm lộc,\n[${s}] tỏa sáng rực vang tên!`
+  },
+  {
+    num: 'QUẺ SỐ 47: TRẠCH THỦY KHỐN',
+    name: 'CỰC HẠN HÓA SANH · TÁI SINH TỪ TRO TÀN',
+    rate: '90% CE',
+    luck: 'Phượng Hoàng Tái Sinh ⭐⭐⭐⭐',
+    advice: 'Đáy Của Tuyệt Vọng',
+    poem: (s) => `Tưởng như tuyệt lộ chốn mênh mông,\nTro tàn tái hiện cánh phượng hoàng.\nMã [${s}] tung cánh bay vút gió,\nLội ngược dòng trần tím rạng đông!`
   },
   {
     num: 'QUẺ SỐ 48: THỦY PHONG TỈNH',
@@ -3441,52 +3681,20 @@ const FORTUNE_POEMS = [
     poem: (s) => `Khối ngoại gom ròng chuỗi ngút ngàn,\nHàng ngon chớp mắt sạch bong sàn.\nTiền tươi rói rói vào như nước,\n[${s}] thăng tiến vút muôn vàn!`
   },
   {
-    num: 'QUẺ SỐ 53: PHONG SƠN TIỆM',
-    name: 'TIỆM TIẾN VỮNG CHÃI · XÂY NỀN VỮNG CHẮC',
-    rate: '88% CE',
-    luck: 'Chắc Như Bê Tông ⭐⭐⭐⭐',
-    advice: 'Đầu Tư Giá Trị',
-    poem: (s) => `Cứ đi chầm chậm mà chắc chân,\nTích lũy thanh khoản chẳng băn khoăn.\nMai này bứt phá ai theo kịp,\n[${s}] đem lại lộc bội phần!`
-  },
-  {
-    num: 'QUẺ SỐ 55: LÔI HỎA PHONG',
-    name: 'SẤM CHỚP TƯNG BỪNG · THỜI HOÀNG KIM ĐẠI THẮNG',
+    num: 'QUẺ SỐ 49: TRẠCH HỎA CÁCH',
+    name: 'CẢI CÁCH TOÀN DIỆN · NÂNG HẠNG THỊ TRƯỜNG',
     rate: '99% CE',
-    luck: 'Thiên Niên Kỷ ⭐⭐⭐⭐⭐',
-    advice: 'Mở Tiệc Ăn Mừng',
-    poem: (s) => `Thời tới cản không kịp nữa rồi,\nSấm vang rền rĩ dậy nơi nơi.\nMã [${s}] rực tím bao phiên tới,\nTài khoản nhân ba rạng cuộc đời!`
+    luck: 'Thời Đại Hoàng Kim ⭐⭐⭐⭐⭐',
+    advice: 'Đón Đầu Sóng Lớn',
+    poem: (s) => `Nâng hạng thị trường đón sóng to,\nThời thế sang trang hết lắng lo.\nMã [${s}] hóa rồng bay đỉnh mới,\nTriệu lệnh mua tràn bảng điện to!`
   },
   {
-    num: 'QUẺ SỐ 57: THUẦN TỐN',
-    name: 'GIÓ LƯỚT MẶT SÓNG · THUYỀN VỀ BỜ BÌNH YÊN',
-    rate: '90% CE',
-    luck: 'Về Bờ Thần Tốc ⭐⭐⭐⭐',
-    advice: 'Thở Phào Nhẹ Nhõm',
-    poem: (s) => `Gió đưa cánh buồm rẽ trùng khơi,\nBao ngày gồng lỗ đã qua rồi.\nThuyền [${s}] nay cập bến đỗ,\nCổ đông hớn hở ngắm hoa cười!`
-  },
-  {
-    num: 'QUẺ SỐ 58: THUẦN ĐOÀI',
-    name: 'HỒ NƯỚC LONG LANH · NIỀM VUI VÔ TẬN',
-    rate: '93% CE',
-    luck: 'Hỷ Lộc Đầy Nhà ⭐⭐⭐⭐⭐',
-    advice: 'Chia Vui Bạn Bè',
-    poem: (s) => `Vui mừng rạng rỡ nở nụ hoa,\nSắc tím tươi reo khắp mọi nhà.\nĐồng đạo cùng chúc mừng thắng lợi,\nMã [${s}] vang khúc tráng ca!`
-  },
-  {
-    num: 'QUẺ SỐ 60: THỦY TRẠCH TIẾT',
-    name: 'ĐIỀU ĐỘ THÔNG MINH · CHỐT LÃI KHÔNG BAO GIỜ SAI',
-    rate: '87% CE',
-    luck: 'Lộc Đút Túi ⭐⭐⭐⭐',
-    advice: 'Đút Tiền Vào Túi',
-    poem: (s) => `Chốt lãi chẳng bao giờ thấy sai,\nMột phần giữ lại đón tương lai.\nThong dong tự tại ly trà nóng,\n[${s}] mang tới vạn an bài!`
-  },
-  {
-    num: 'QUẺ SỐ 64: HỎA THỦY VỊ TẾ',
-    name: 'TÂM AN VÔ VI · XẢ SẠCH MARGIN',
-    rate: '85% CE',
-    luck: 'Bình An Đại Cát ⭐⭐⭐⭐',
-    advice: 'Tắt App Đi Cafe',
-    poem: (s) => `Thị trường biến động mặc phong vân,\nGõ mõ buông lơi mối nợ nần.\nTâm tĩnh lộc tự nhiên tìm đến,\nTím trần sẽ gõ cửa người thân!`
+    num: 'QUẺ SỐ 50: HỎA PHONG ĐỈNH',
+    name: 'ĐỈNH CAO THÀNH CÔNG · THỊNH VƯỢNG VĨNH CỬU',
+    rate: '100% CE',
+    luck: 'Thiên Thu Thịnh Vượng ⭐⭐⭐⭐⭐',
+    advice: 'Tậu Biệt Thự Nghỉ Dưỡng',
+    poem: (s) => `Đỉnh cao danh vọng thấu mây xanh,\nBao tháng kiên trì quả ngọt lành.\nMã [${s}] trần tím thiên thu thịnh,\nPhú quý vinh hoa rạng sử xanh!`
   }
 ];
 
@@ -3521,7 +3729,7 @@ function startShakeFortune() {
     document.getElementById('fortuneLuck').textContent = pick.luck;
     document.getElementById('fortuneAdvice').textContent = pick.advice;
 
-    lastFortuneText = `🎋 [QUẺ BÁT QUÁI THẦN TÀI: ${pick.name}]\nChiếu mệnh mã: #${currentUser.stock}\n\n${poemTxt}\n\nTỷ lệ Tím: ${pick.rate} | Lời khuyên: ${pick.advice}\n#ChanhDienChungKhoan #GieoQueBatQuai #${currentUser.stock}`;
+    lastFortuneText = `🎋 [QUẺ BÁT QUÁI THẦN TÀI: ${pick.name}]\nChiếu mệnh mã: #${currentUser.stock}\n\n${poemTxt}\n\nTỷ lệ Tím: ${pick.rate} | Lời khuyên: ${pick.advice}\n\n🙏 Thỉnh quẻ cầu may tại Chánh Điện Chứng Khoán:\nhttps://chanh-dien-chung-khoan.onrender.com\n#ChanhDienChungKhoan #GieoQueBatQuai #${currentUser.stock}`;
 
     tubePhase.style.display = 'none';
     fortuneCard.style.display = 'block';
@@ -3557,12 +3765,29 @@ reFortuneBtn.addEventListener('click', () => {
   startShakeFortune();
 });
 
-copyFortuneBtn.addEventListener('click', () => {
-  navigator.clipboard.writeText(lastFortuneText).then(() => {
-    showToast('📋 Đã copy Thơ Quẻ may mắn vào Clipboard!');
-  }).catch(() => {
+copyFortuneBtn.addEventListener('click', async () => {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: `🎋 [${currentFortunePick ? currentFortunePick.name : 'Quẻ Bát Quái Thần Tài'}] - Chánh Điện Chứng Khoán`,
+        text: lastFortuneText,
+        url: 'https://chanh-dien-chung-khoan.onrender.com'
+      });
+      showToast('✨ Đã mở menu chia sẻ Quẻ may mắn!');
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+    }
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(lastFortuneText).then(() => {
+      showToast('📋 Đã copy Thơ Quẻ! Dán vào Zalo/Facebook khoe ngay!');
+    }).catch(() => {
+      showToast('📋 Đã copy Thơ Quẻ!');
+    });
+  } else {
     showToast('📋 Đã copy Thơ Quẻ!');
-  });
+  }
 });
 
 // Ngâm Thơ Quẻ Voice Recitation
