@@ -57,6 +57,9 @@ html, body { height: 100%; width: 100%; margin: 0; background: var(--bg); color:
   background: #000;
   box-shadow: 0 0 120px rgba(0, 0, 0, 0.98), 0 0 60px rgba(217, 70, 239, 0.28);
   cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 #stage.grabbing { cursor: grabbing; }
 
@@ -67,6 +70,8 @@ html, body { height: 100%; width: 100%; margin: 0; background: var(--bg); color:
   height: 100%;
   display: block;
   touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Common UI overlays */
@@ -1538,6 +1543,7 @@ html, body { height: 100%; width: 100%; margin: 0; background: var(--bg); color:
     aspect-ratio: auto !important;
     overflow: hidden !important;
     box-shadow: none !important;
+    touch-action: none !important;
   }
   #stage canvas {
     position: absolute !important;
@@ -1545,7 +1551,8 @@ html, body { height: 100%; width: 100%; margin: 0; background: var(--bg); color:
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-    object-position: center 38% !important;
+    object-position: center center !important;
+    touch-action: none !important;
   }
 
   /* Clean up cluttered overlay elements in vertical portrait view */
@@ -1883,7 +1890,10 @@ html, body { height: 100%; width: 100%; margin: 0; background: var(--bg); color:
       <button class="btn fortune" id="openFortuneBtn">🎋 Gieo Quẻ Bát Quái</button>
       <button class="btn gift" id="openGiftBtn">🎁 Dâng Lễ Vật</button>
       <button class="btn primary" id="openPrayBtn">✍️ Dâng Sớ Cầu Trần</button>
+      <button class="btn" id="dockFocusMeBtn" title="Zoom thẳng vào bồ đoàn của bạn">🎯 Về Tôi</button>
+      <button class="btn" id="dockResetCamBtn" title="Xem góc nhìn Chánh Điện">🔄 Toàn Cảnh</button>
       <button class="btn" id="openCharBtn">👤 Nhân Vật</button>
+      <button class="btn" id="dockCaptureFbBtn" title="Chụp ảnh chứng chỉ dâng sớ">📸 Chụp FB</button>
       <button class="btn" id="ringBellBtn" title="Thỉnh Đại Hồng Chung">🔔 Chuông</button>
       <button class="btn" id="soundToggleBtn">🔊 Nhạc: Bật</button>
       <button class="btn" id="ttsToggleBtn">🗣️ Giọng Đọc: Bật</button>
@@ -2480,21 +2490,97 @@ const camera = {
   camStartY: 0
 };
 
+// Unified Screen-to-Canvas & Aspect Ratio Calculator
+function getCanvasRenderMetrics() {
+  const rect = stage.getBoundingClientRect();
+  const canvasAspect = SW / SH;
+  const rectAspect = rect.width / (rect.height || 1);
+  let renderWidth = rect.width;
+  let renderHeight = rect.height;
+  let renderLeft = 0;
+  let renderTop = 0;
+
+  if (Math.abs(rectAspect - canvasAspect) > 0.02) {
+    if (rectAspect < canvasAspect) {
+      renderHeight = rect.height;
+      renderWidth = rect.height * canvasAspect;
+      renderLeft = (rect.width - renderWidth) / 2;
+      renderTop = 0;
+    } else {
+      renderWidth = rect.width;
+      renderHeight = rect.width / canvasAspect;
+      renderLeft = 0;
+      renderTop = (rect.height - renderHeight) / 2;
+    }
+  }
+
+  return { rect, renderWidth, renderHeight, renderLeft, renderTop };
+}
+
+function screenToWorld(clientX, clientY) {
+  const m = getCanvasRenderMetrics();
+  const sx = ((clientX - m.rect.left) - m.renderLeft) * (SW / m.renderWidth);
+  const sy = ((clientY - m.rect.top) - m.renderTop) * (SH / m.renderHeight);
+  const wx = (sx - camera.x) / camera.zoom;
+  const wy = (sy - camera.y) / camera.zoom;
+  return { sx, sy, wx, wy };
+}
+
 function clampCamera() {
+  const isPortrait = window.innerHeight > window.innerWidth || (window.innerWidth <= 768 && window.innerHeight / window.innerWidth > 1.05);
   const z = camera.targetZoom;
-  const minX = -(z - 1) * SW;
-  const minY = -(z - 1) * SH;
-  camera.targetX = Math.min(0, Math.max(minX, camera.targetX));
-  camera.targetY = Math.min(0, Math.max(minY, camera.targetY));
+  
+  if (isPortrait) {
+    // Mobile portrait: allow generous free panning horizontally and vertically
+    // so users can easily view the Golden Bull on the left, Assembly on the right,
+    // and all 24 golden lotus cushions and floor devotees below!
+    const extraX = 640 + (z - 1) * (SW / 2);
+    const extraYTop = 60 + (z - 1) * (SH / 2);
+    const extraYBot = 270 + (z - 1) * (SH / 2);
+    
+    const minX = -extraX;
+    const maxX = extraX;
+    const minY = -extraYBot;
+    const maxY = extraYTop;
+    
+    camera.targetX = Math.min(maxX, Math.max(minX, camera.targetX));
+    camera.targetY = Math.min(maxY, Math.max(minY, camera.targetY));
+  } else {
+    // Landscape / Desktop (16:9 cinema ratio)
+    const marginX = 120;
+    const marginY = 80;
+    const minX = -(z - 1) * SW - marginX;
+    const maxX = marginX;
+    const minY = -(z - 1) * SH - marginY;
+    const maxY = marginY;
+    
+    camera.targetX = Math.min(maxX, Math.max(minX, camera.targetX));
+    camera.targetY = Math.min(maxY, Math.max(minY, camera.targetY));
+  }
+}
+
+// Initial position on vertical screens: comfortably display altar & front floor cushions
+if (window.innerHeight > window.innerWidth) {
+  camera.targetY = -90;
+  camera.y = -90;
 }
 
 const stage = document.getElementById('stage');
 
+// Unified Pointer & Multi-touch Gesture Engine (Mouse, Touchscreen, Stylus)
+const activePointers = new Map();
+let pinchStartDist = 0;
+let pinchStartZoom = 1.0;
+let pinchCamStartX = 0;
+let pinchCamStartY = 0;
+let pinchCenter = { clientX: 0, clientY: 0 };
+let pointerDownPos = { x: 0, y: 0, t: 0 };
+
 stage.addEventListener('wheel', e => {
   e.preventDefault();
-  const rect = stage.getBoundingClientRect();
-  const mouseScreenX = (e.clientX - rect.left) * (SW / rect.width);
-  const mouseScreenY = (e.clientY - rect.top) * (SH / rect.height);
+  const m = getCanvasRenderMetrics();
+  const mouseScreenX = ((e.clientX - m.rect.left) - m.renderLeft) * (SW / m.renderWidth);
+  const mouseScreenY = ((e.clientY - m.rect.top) - m.renderTop) * (SH / m.renderHeight);
 
   const zoomFactor = e.deltaY < 0 ? 1.18 : 1 / 1.18;
   const oldZoom = camera.targetZoom;
@@ -2502,8 +2588,14 @@ stage.addEventListener('wheel', e => {
 
   if (camera.targetZoom <= 1.01) {
     camera.targetZoom = 1.0;
-    camera.targetX = 0;
-    camera.targetY = 0;
+    const isPortrait = window.innerHeight > window.innerWidth;
+    if (!isPortrait) {
+      camera.targetX = 0;
+      camera.targetY = 0;
+    } else {
+      camera.targetY = -90;
+    }
+    clampCamera();
   } else {
     const scaleChange = camera.targetZoom / oldZoom;
     camera.targetX = mouseScreenX - (mouseScreenX - camera.targetX) * scaleChange;
@@ -2512,31 +2604,119 @@ stage.addEventListener('wheel', e => {
   }
 }, { passive: false });
 
-stage.addEventListener('mousedown', e => {
-  if (e.target.closest('.hud') || e.target.closest('#camToolbar') || e.target.closest('#stockBoardPanel') || e.target.closest('#fishWidget') || e.target.closest('#quickPrayerBar') || e.target.closest('#royalMeritBanner') || e.target.closest('#emoteBar')) return;
-  camera.isDragging = true;
-  stage.classList.add('grabbing');
-  camera.dragStartX = e.clientX;
-  camera.dragStartY = e.clientY;
-  camera.camStartX = camera.targetX;
-  camera.camStartY = camera.targetY;
+stage.addEventListener('pointerdown', e => {
+  // Ignore pointer interactions that originate inside HUD overlays or modals
+  if (e.target.closest('.hud') || e.target.closest('#camToolbar') || 
+      e.target.closest('#stockBoardPanel') || e.target.closest('#fishWidget') || 
+      e.target.closest('#quickPrayerBar') || e.target.closest('#royalMeritBanner') || 
+      e.target.closest('#emoteBar') || e.target.closest('.modal-backdrop') || 
+      e.target.closest('#bottomDock')) {
+    return;
+  }
+
+  activePointers.set(e.pointerId, { clientX: e.clientX, clientY: e.clientY });
+  try {
+    stage.setPointerCapture(e.pointerId);
+  } catch (err) {}
+
+  if (activePointers.size === 1) {
+    camera.isDragging = true;
+    stage.classList.add('grabbing');
+    camera.dragStartX = e.clientX;
+    camera.dragStartY = e.clientY;
+    camera.camStartX = camera.targetX;
+    camera.camStartY = camera.targetY;
+    pointerDownPos = { x: e.clientX, y: e.clientY, t: Date.now() };
+  } else if (activePointers.size === 2) {
+    // 2-finger multi-touch: start pinch-to-zoom
+    camera.isDragging = false;
+    const pts = Array.from(activePointers.values());
+    pinchStartDist = Math.hypot(pts[0].clientX - pts[1].clientX, pts[0].clientY - pts[1].clientY) || 1;
+    pinchStartZoom = camera.targetZoom;
+    pinchCamStartX = camera.targetX;
+    pinchCamStartY = camera.targetY;
+    pinchCenter = {
+      clientX: (pts[0].clientX + pts[1].clientX) / 2,
+      clientY: (pts[0].clientY + pts[1].clientY) / 2
+    };
+  }
 });
 
-window.addEventListener('mousemove', e => {
-  if (!camera.isDragging) return;
-  const rect = stage.getBoundingClientRect();
-  const dx = (e.clientX - camera.dragStartX) * (SW / rect.width);
-  const dy = (e.clientY - camera.dragStartY) * (SH / rect.height);
-  camera.targetX = camera.camStartX + dx;
-  camera.targetY = camera.camStartY + dy;
-  clampCamera();
+stage.addEventListener('pointermove', e => {
+  if (!activePointers.has(e.pointerId)) return;
+  activePointers.set(e.pointerId, { clientX: e.clientX, clientY: e.clientY });
+
+  const m = getCanvasRenderMetrics();
+
+  if (activePointers.size === 1 && camera.isDragging) {
+    const dx = (e.clientX - camera.dragStartX) * (SW / m.renderWidth);
+    const dy = (e.clientY - camera.dragStartY) * (SH / m.renderHeight);
+    camera.targetX = camera.camStartX + dx;
+    camera.targetY = camera.camStartY + dy;
+    clampCamera();
+  } else if (activePointers.size >= 2) {
+    const pts = Array.from(activePointers.values());
+    const curDist = Math.hypot(pts[0].clientX - pts[1].clientX, pts[0].clientY - pts[1].clientY);
+    const scale = curDist / pinchStartDist;
+    const oldZoom = camera.targetZoom;
+    camera.targetZoom = Math.min(camera.maxZoom, Math.max(camera.minZoom, pinchStartZoom * scale));
+    
+    // Smooth zoom centered on pinch focus point
+    const mCenter = getCanvasRenderMetrics();
+    const cx = ((pinchCenter.clientX - mCenter.rect.left) - mCenter.renderLeft) * (SW / mCenter.renderWidth);
+    const cy = ((pinchCenter.clientY - mCenter.rect.top) - mCenter.renderTop) * (SH / mCenter.renderHeight);
+    const scaleChange = camera.targetZoom / oldZoom;
+    camera.targetX = cx - (cx - camera.targetX) * scaleChange;
+    camera.targetY = cy - (cy - camera.targetY) * scaleChange;
+    clampCamera();
+  }
 });
 
-window.addEventListener('mouseup', () => {
-  camera.isDragging = false;
-  stage.classList.remove('grabbing');
+function handlePointerEnd(e) {
+  if (activePointers.has(e.pointerId)) {
+    try {
+      stage.releasePointerCapture(e.pointerId);
+    } catch (err) {}
+    activePointers.delete(e.pointerId);
+  }
+
+  if (activePointers.size === 1) {
+    const remaining = Array.from(activePointers.values())[0];
+    camera.isDragging = true;
+    camera.dragStartX = remaining.clientX;
+    camera.dragStartY = remaining.clientY;
+    camera.camStartX = camera.targetX;
+    camera.camStartY = camera.targetY;
+  } else if (activePointers.size === 0) {
+    camera.isDragging = false;
+    stage.classList.remove('grabbing');
+  }
+}
+
+stage.addEventListener('pointerup', handlePointerEnd);
+stage.addEventListener('pointercancel', handlePointerEnd);
+window.addEventListener('pointerup', handlePointerEnd);
+window.addEventListener('pointercancel', handlePointerEnd);
+
+// Single Tap Detection (for Merit Box or devotee interactions)
+stage.addEventListener('pointerup', e => {
+  const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+  if (dist < 20 && (Date.now() - pointerDownPos.t) < 600) {
+    if (e.target.closest('.hud') || e.target.closest('#camToolbar') || 
+        e.target.closest('#stockBoardPanel') || e.target.closest('#fishWidget') || 
+        e.target.closest('#quickPrayerBar') || e.target.closest('#royalMeritBanner') || 
+        e.target.closest('#emoteBar') || e.target.closest('.modal-backdrop') || 
+        e.target.closest('#bottomDock')) {
+      return;
+    }
+    const { wx, wy } = screenToWorld(e.clientX, e.clientY);
+    if (typeof isMeritBoxClicked === 'function' && isMeritBoxClicked(wx, wy)) {
+      openMeritBoxModal();
+    }
+  }
 });
 
+// Camera Controls Buttons
 document.getElementById('zoomInBtn').addEventListener('click', () => {
   const oldZoom = camera.targetZoom;
   camera.targetZoom = Math.min(camera.maxZoom, camera.targetZoom * 1.3);
@@ -2550,9 +2730,7 @@ document.getElementById('zoomOutBtn').addEventListener('click', () => {
   const oldZoom = camera.targetZoom;
   camera.targetZoom = Math.max(camera.minZoom, camera.targetZoom / 1.3);
   if (camera.targetZoom <= 1.01) {
-    camera.targetZoom = 1.0;
-    camera.targetX = 0;
-    camera.targetY = 0;
+    resetCamera();
   } else {
     const scaleChange = camera.targetZoom / oldZoom;
     camera.targetX = SW / 2 - (SW / 2 - camera.targetX) * scaleChange;
@@ -2561,10 +2739,33 @@ document.getElementById('zoomOutBtn').addEventListener('click', () => {
   }
 });
 
-document.getElementById('resetCamBtn').addEventListener('click', () => {
+function resetCamera() {
+  const isPortrait = window.innerHeight > window.innerWidth;
   camera.targetZoom = 1.0;
   camera.targetX = 0;
-  camera.targetY = 0;
+  camera.targetY = isPortrait ? -90 : 0;
+  clampCamera();
+}
+
+document.getElementById('resetCamBtn').addEventListener('click', resetCamera);
+
+const dockResetBtn = document.getElementById('dockResetCamBtn');
+if (dockResetBtn) dockResetBtn.addEventListener('click', resetCamera);
+
+const dockFocusBtn = document.getElementById('dockFocusMeBtn');
+if (dockFocusBtn) dockFocusBtn.addEventListener('click', focusOnUser);
+
+const dockCaptureBtn = document.getElementById('dockCaptureFbBtn');
+if (dockCaptureBtn) dockCaptureBtn.addEventListener('click', captureForFacebook);
+
+// Smooth orientation handling
+window.addEventListener('resize', () => {
+  clampCamera();
+});
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => {
+    clampCamera();
+  }, 250);
 });
 
 function focusOnUser() {
@@ -5038,73 +5239,18 @@ function openMeritBoxModal() {
   showToast('☕ Mở Quỹ Trà Đá Tiếp Sức Server!');
 }
 
-// Touch listener on cvs for mobile iPhone & Android
-let cvsTouchStart = { x: 0, y: 0, t: 0 };
-cvs.addEventListener('touchstart', e => {
-  if (e.touches && e.touches.length === 1) {
-    cvsTouchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() };
-  }
-}, { passive: true });
-
-cvs.addEventListener('touchend', e => {
-  if (e.changedTouches && e.changedTouches.length === 1) {
-    const t = e.changedTouches[0];
-    const dist = Math.hypot(t.clientX - cvsTouchStart.x, t.clientY - cvsTouchStart.y);
-    if (dist < 30 && (Date.now() - cvsTouchStart.t) < 700) {
-      const rect = cvs.getBoundingClientRect();
-      const sx = (t.clientX - rect.left) * (SW / rect.width);
-      const sy = (t.clientY - rect.top) * (SH / rect.height);
-      const wx = (sx - camera.x) / camera.zoom;
-      const wy = (sy - camera.y) / camera.zoom;
-      if (isMeritBoxClicked(wx, wy)) {
-        openMeritBoxModal();
-      }
-    }
-  }
-}, { passive: true });
-
 // 1. Direct Canvas Click listener
 cvs.addEventListener('click', e => {
-  const rect = cvs.getBoundingClientRect();
-  const sx = (e.clientX - rect.left) * (SW / rect.width);
-  const sy = (e.clientY - rect.top) * (SH / rect.height);
-  const wx = (sx - camera.x) / camera.zoom;
-  const wy = (sy - camera.y) / camera.zoom;
-
+  const { wx, wy } = screenToWorld(e.clientX, e.clientY);
   if (isMeritBoxClicked(wx, wy)) {
     openMeritBoxModal();
   }
 });
 
-// 2. Stage Pointerup listener (for mobile touch taps on iPhone & Android)
-let stagePointerDownPos = { x: 0, y: 0 };
-stage.addEventListener('pointerdown', e => {
-  stagePointerDownPos = { x: e.clientX, y: e.clientY };
-});
-
-stage.addEventListener('pointerup', e => {
-  if (Math.hypot(e.clientX - stagePointerDownPos.x, e.clientY - stagePointerDownPos.y) < 25) {
-    if (e.target.closest('.hud') || e.target.closest('.modal-backdrop') || e.target.closest('#camToolbar')) return;
-    const rect = cvs.getBoundingClientRect();
-    const sx = (e.clientX - rect.left) * (SW / rect.width);
-    const sy = (e.clientY - rect.top) * (SH / rect.height);
-    const wx = (sx - camera.x) / camera.zoom;
-    const wy = (sy - camera.y) / camera.zoom;
-
-    if (isMeritBoxClicked(wx, wy)) {
-      openMeritBoxModal();
-    }
-  }
-});
-
-// 3. Hover pointer cursor
+// 2. Hover pointer cursor on desktop
 stage.addEventListener('pointermove', e => {
   if (camera.isDragging) return;
-  const rect = cvs.getBoundingClientRect();
-  const sx = (e.clientX - rect.left) * (SW / rect.width);
-  const sy = (e.clientY - rect.top) * (SH / rect.height);
-  const wx = (sx - camera.x) / camera.zoom;
-  const wy = (sy - camera.y) / camera.zoom;
+  const { wx, wy } = screenToWorld(e.clientX, e.clientY);
 
   if (isMeritBoxClicked(wx, wy)) {
     stage.style.cursor = 'pointer';
